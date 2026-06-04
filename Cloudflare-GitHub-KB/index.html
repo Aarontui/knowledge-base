@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Global Knowledge Base</title>
+<style>
+body{font-family:Arial;margin:30px}
+input{width:100%;padding:10px;margin-bottom:20px}
+.cat{margin:10px 0}
+</style>
+</head>
+<body>
+<h1>📚 Global Knowledge Base</h1>
+<input id="search" placeholder="Search PDF filename...">
+<div id="results"></div>
+<script>
+fetch('search-index.json')
+.then(r=>r.json())
+.then(data=>{
+ const results=document.getElementById('results');
+ const render=(items)=>{
+   results.innerHTML='';
+   items.forEach(i=>{
+     const d=document.createElement('div');
+     d.className='cat';
+     d.innerHTML=`<a href="${i.path}" target="_blank">${i.name}</a> (${i.category})`;
+     results.appendChild(d);
+   });
+ };
+ render(data);
+ document.getElementById('search').addEventListener('input',e=>{
+   const q=e.target.value.toLowerCase();
+   render(data.filter(x=>x.name.toLowerCase().includes(q)));
+ });
+});
+</script>
+</body>
+</html>
